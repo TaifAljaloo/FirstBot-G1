@@ -1,7 +1,6 @@
 import cv2
 import time
 import numpy as np
-import matplotlib.pyplot as plt
 import argparse
 import motors
 from math import pi
@@ -113,7 +112,7 @@ while True:
   speed = 4
   print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
   motor = motors.motor()
-  motor.move(left_percentage*speed,right_percentage*speed)
+  motor.move(left_percentage*speed/100,right_percentage*speed/100)
   
 
 
