@@ -110,9 +110,10 @@ while True:
   right_percentage = round(right_percentage, 2)
 
 
+  speed = 4
   print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
   motor = motors.motor()
-  motor.move(left_percentage*2*pi,right_percentage*2*pi)
+  motor.move(left_percentage*speed,right_percentage*speed)
   
 
 
