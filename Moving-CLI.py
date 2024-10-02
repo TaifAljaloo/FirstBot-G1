@@ -30,3 +30,6 @@ def main():
             continue
         time.sleep(2)
         motor.stop()
+        
+if __name__ == "__main__":
+    main()

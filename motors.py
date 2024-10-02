@@ -20,8 +20,8 @@ class motor:
         self.right = 2
 
     def move(self, left_value, right_value):
-        self.dxl_io.set_moving_speed({self.left: math.degrees(left_value)})
-        self.dxl_io.set_moving_speed({self.right: math.degrees(-right_value)})
+        self.dxl_io.set_moving_speed({self.left: math.degrees(l-left_value)})
+        self.dxl_io.set_moving_speed({self.right: math.degrees(right_value)})
 
     def stop(self):
         self.dxl_io.set_moving_speed({self.left: math.degrees(0)})
@@ -60,7 +60,9 @@ class motor:
         self.move(-speed, 0)
         
     def move_backward_right(self, speed):
+        
         self.move(0, -speed)
+        
         
         
         
