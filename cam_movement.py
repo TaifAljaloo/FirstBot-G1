@@ -119,17 +119,20 @@ while True:
   middle = np.interp(highest_sum_index,[0,320],[-scale_size,scale_size])
   
   print("middle:", middle)
+  if(middle == -100 or middle == 100):
+    motor.move(0,0)
 
-  
-  if(middle > 0):
-          right_turn_f = middle/scale_size*speed
-          left_turn_f = scale_size-middle/scale_size*speed
+
   else:
-          right_turn_f = scale_size-abs(middle)/scale_size*speed
-          left_turn_f = abs(middle)/scale_size*speed
-        
-  print("Left: ", left_turn_f, "% Right: ", right_turn_f, "%")
-  motor.move(right_turn_f/10,left_turn_f/10)
+    if(middle > 0):
+            right_turn_f = middle/scale_size*speed
+            left_turn_f = scale_size-middle/scale_size*speed
+    else:
+            right_turn_f = scale_size-abs(middle)/scale_size*speed
+            left_turn_f = abs(middle)/scale_size*speed
+          
+    print("Left: ", left_turn_f, "% Right: ", right_turn_f, "%")
+    motor.move(right_turn_f/10,left_turn_f/10)
   
 
 
