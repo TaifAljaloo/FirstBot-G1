@@ -23,6 +23,7 @@ fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 fps = 0
 num_frames = 30
+motor = motors.motor()
 
 while True:
   if fps == 0:
@@ -111,7 +112,6 @@ while True:
 
   speed = 4
   print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
-  motor = motors.motor()
   motor.move(left_percentage*speed/100,right_percentage*speed/100)
   
 
