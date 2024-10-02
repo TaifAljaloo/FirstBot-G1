@@ -103,8 +103,8 @@ while True:
 
   sum1 = np.sum(part1)/10000 * 4
   sum2 = np.sum(part2)/10000 * 3 
-  sum3 = np.sum(part3)/10000 * 1
-  sum4 = np.sum(part4)/10000 * 1
+  sum3 = np.sum(part3)/10000 * 2
+  sum4 = np.sum(part4)/10000 * 2
   sum5 = np.sum(part5)/10000 * 3
   sum6 = np.sum(part6)/10000 * 4
   
