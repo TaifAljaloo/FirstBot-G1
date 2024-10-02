@@ -16,12 +16,12 @@ class motor:
         self.dxl_io = pypot.dynamixel.DxlIO(ports[0])
         self.dxl_io.set_wheel_mode([1])
 
-        self.left = 1
-        self.right = 2
+        self.left = 2
+        self.right = 1
 
     def move(self, left_value, right_value):
-        self.dxl_io.set_moving_speed({self.left: math.degrees(l-left_value)})
-        self.dxl_io.set_moving_speed({self.right: math.degrees(right_value)})
+        self.dxl_io.set_moving_speed({self.left: math.degrees(left_value)})
+        self.dxl_io.set_moving_speed({self.right: math.degrees(l-right_value)})
 
     def stop(self):
         self.dxl_io.set_moving_speed({self.left: math.degrees(0)})
