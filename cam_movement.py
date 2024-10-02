@@ -100,7 +100,7 @@ while True:
   # Display the histogram
   cv2.imshow('Histogram', hist_img)
 
-  print(np.mean(gray))
+  print( np.argmax(gray))
   # Calculate the sum of gray values on the left and right halves
   left_half = gray[:, :gray.shape[1] // 2]
   right_half = gray[:, gray.shape[1] // 2:]
