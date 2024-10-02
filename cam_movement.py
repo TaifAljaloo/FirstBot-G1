@@ -6,9 +6,9 @@ import motors
 from math import pi
 
 # Open the default camera
-#cam = cv2.VideoCapture(0)
-cam = cv2.VideoCapture()
-cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
+cam = cv2.VideoCapture(0)
+# cam = cv2.VideoCapture()
+# cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
 
 
 # Get the default frame width and height
@@ -22,8 +22,16 @@ cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 fps = 0
-num_frames = 30
+num_frames = 306
+last_turn = 0 #1 -> right, 2 -> left
+minimum_speed = 3
+speed = 6
 motor = motors.motor()
+
+scale_size = 100
+
+right_turn_f = 0
+left_turn_f = 0
 
 while True:
   if fps == 0:
@@ -95,26 +103,36 @@ while True:
   # Display the histogram
   cv2.imshow('Histogram', hist_img)
 
+  print( np.argmax(gray))
   # Calculate the sum of gray values on the left and right halves
   left_half = gray[:, :gray.shape[1] // 2]
   right_half = gray[:, gray.shape[1] // 2:]
+  
+  
+  column_sums = np.sum(gray, axis=0)
 
-  left_sum = np.sum(left_half)
-  right_sum = np.sum(right_half)
+  # Find the index of the column with the highest sum
+  highest_sum_index = np.argmax(column_sums)
 
-  total_sum = left_sum + right_sum
-  if(total_sum == 0):
-        left_percentage,right_percentage = 0
+  print("Column index with highest sum:", highest_sum_index)
+    
+  middle = np.interp(highest_sum_index,[0,320],[-scale_size,scale_size])
+  
+  print("middle:", middle)
+  if(middle == -100 or middle == 100):
+    motor.move(0,0)
+
+
   else:
-    left_percentage = (left_sum / total_sum) * 100
-    left_percentage = round(left_percentage, 2)
-    right_percentage = (right_sum / total_sum) * 100
-    right_percentage = round(right_percentage, 2)
-
-
-  speed = 4
-  print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
-  motor.move(left_percentage*speed/(100*),right_percentage*speed/(100*))
+    if(middle > 0):
+            right_turn_f = middle/scale_size*speed
+            left_turn_f = scale_size-middle/scale_size*speed
+    else:
+            right_turn_f = scale_size-abs(middle)/scale_size*speed
+            left_turn_f = abs(middle)/scale_size*speed
+          
+    print("Left: ", left_turn_f, "% Right: ", right_turn_f, "%")
+    motor.move(right_turn_f/10,left_turn_f/10)
   
 
 
