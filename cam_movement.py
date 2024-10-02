@@ -142,7 +142,7 @@ while True:
             left_turn_f = abs(middle)/scale_size*speed
           
     print("Left: ", left_turn_f, "% Right: ", right_turn_f, "%")
-    motor.move(left_turn_f,right_turn_f)
+    motor.move(left_turn_f/100,right_turn_f/100)
   
 
 
