@@ -117,7 +117,7 @@ while True:
   right = round(right,2)
   
   
-  motor.move(left,right)
+  motor.move(right,left)
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
 
