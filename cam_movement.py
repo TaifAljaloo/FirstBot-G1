@@ -119,30 +119,17 @@ while True:
   middle = np.interp(highest_sum_index,[0,320],[-scale_size,scale_size])
   
   print("middle:", middle)
+
   
-  left_sum = np.sum(left_half)
-  right_sum = np.sum(right_half)
-  total_sum = left_sum + right_sum
-  
-  if(total_sum == 0):
-        left_percentage = 0
-        right_percentage = 0
-        if(last_turn == 1):
-            motor.move(minimum_speed,0)
-        else:
-            motor.move(0,minimum_speed)
-        print("last turn : " + str(last_turn))
-          
+  if(middle > 0):
+          right_turn_f = middle/scale_size*speed
+          left_turn_f = scale_size-middle/scale_size*speed
   else:
-    if(middle > 0):
-            right_turn_f = middle/scale_size*speed
-            left_turn_f = scale_size-middle/scale_size*speed
-    else:
-            right_turn_f = scale_size-abs(middle)/scale_size*speed
-            left_turn_f = abs(middle)/scale_size*speed
-          
-    print("Left: ", left_turn_f, "% Right: ", right_turn_f, "%")
-    motor.move(right_turn_f/10,left_turn_f/10)
+          right_turn_f = scale_size-abs(middle)/scale_size*speed
+          left_turn_f = abs(middle)/scale_size*speed
+        
+  print("Left: ", left_turn_f, "% Right: ", right_turn_f, "%")
+  motor.move(right_turn_f/10,left_turn_f/10)
   
 
 
