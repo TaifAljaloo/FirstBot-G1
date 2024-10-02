@@ -103,16 +103,18 @@ while True:
   right_sum = np.sum(right_half)
 
   total_sum = left_sum + right_sum
-
-  left_percentage = (left_sum / total_sum) * 100
-  left_percentage = round(left_percentage, 2)
-  right_percentage = (right_sum / total_sum) * 100
-  right_percentage = round(right_percentage, 2)
+  if(total_sum == 0):
+        left_percentage,right_percentage = 0
+  else:
+    left_percentage = (left_sum / total_sum) * 100
+    left_percentage = round(left_percentage, 2)
+    right_percentage = (right_sum / total_sum) * 100
+    right_percentage = round(right_percentage, 2)
 
 
   speed = 4
   print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
-  motor.move(left_percentage*speed/(100*-1),right_percentage*speed/(100*-1))
+  motor.move(left_percentage*speed/(100*),right_percentage*speed/(100*))
   
 
 
