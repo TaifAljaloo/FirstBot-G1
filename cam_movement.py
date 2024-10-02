@@ -113,8 +113,10 @@ while True:
 
   print("Column index with highest sum:", highest_sum_index)
     
+  middle = np.interp(highest_sum_index,[0,320],[-10,10])
   
-
+  print("middle:", middle)
+  
   left_sum = np.sum(left_half)
   right_sum = np.sum(right_half)
   total_sum = left_sum + right_sum
