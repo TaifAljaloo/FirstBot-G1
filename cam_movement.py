@@ -28,7 +28,8 @@ minimum_speed = 3
 speed = 6
 motor = motors.motor()
 
-
+right_turn_f = 0
+left_turn_f = 0
 
 while True:
   if fps == 0:
@@ -131,16 +132,15 @@ while True:
         print("last turn : " + str(last_turn))
           
   else:
-    left_percentage = (left_sum / total_sum) * 100
-    left_percentage = round(left_percentage, 2)
-    right_percentage = (right_sum / total_sum) * 100
-    right_percentage = round(right_percentage, 2)
-    if(left_percentage > right_percentage):
-            last_turn = 0
+    if(middle > 0):
+            right_turn_f = middle/10*speed
+            left_turn_f = 10-middle/10*speed
     else:
-            last_turn = 1
-    print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
-    motor.move(left_percentage*speed/(100),right_percentage*speed/(100))
+            right_turn_f = 10-abs(middle)/10*speed
+            left_turn_f = abs(middle)/10*speed
+          
+    print("Left: ", right_turn_f, "% Right: ", left_turn_f, "%")
+    motor.move(left_turn_f,right_turn_f)
   
 
 
