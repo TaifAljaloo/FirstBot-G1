@@ -24,7 +24,8 @@ fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 fps = 0
 num_frames = 306
 last_turn = 0 #1 -> right, 2 -> left
-minimum_speed = 3
+minimum_speed = 10
+speed = 10
 motor = motors.motor()
 
 
@@ -108,11 +109,12 @@ while True:
   total_sum = left_sum + right_sum
   
   if(total_sum == 0):
-        left_percentage,right_percentage = 0
+        left_percentage = 0
+        right_percentage = 0
         if(last_turn == 1):
-            motor.move(40*speed/(100),0*speed/(100))
+            motor.move(minimum_speed,0)
         else:
-            motor.move(0*speed/(100),40*speed/(100))
+            motor.move(0,minimum_speed)
         print("last turn : " + str(last_turn))
           
   else:
@@ -124,18 +126,8 @@ while True:
             last_turn = 0
     else:
             last_turn = 1
-  speed = 4
-  
-        
-        
-        
-
-    
- 
-
-
-  print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
-  motor.move(left_percentage*speed/(100),right_percentage*speed/(100))
+    #print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
+    motor.move(left_percentage*speed/(100),right_percentage*speed/(100))
   
 
 
