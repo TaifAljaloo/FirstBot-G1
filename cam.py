@@ -3,11 +3,13 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
+import motors
+
 
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
-
+motor = motors.motor()
 # Get the default frame width and height
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -99,21 +101,30 @@ while True:
   part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
   part6 = gray[:, 5 * gray.shape[1] // 6:]
 
-  sum1 = np.sum(part1)
-  sum2 = np.sum(part2)
-  sum3 = np.sum(part3)
-  sum4 = np.sum(part4)
-  sum5 = np.sum(part5)
-  sum6 = np.sum(part6)
-
+  sum1 = np.sum(part1)/10000 * 4
+  sum2 = np.sum(part2)/10000 * 3 
+  sum3 = np.sum(part3)/10000 * 0
+  sum4 = np.sum(part4)/10000 * 0
+  sum5 = np.sum(part5)/10000 * 3
+  sum6 = np.sum(part6)/10000 * 4
+  
+  
+  left = sum1 + sum2 + sum3
+  left = left/ 100
+  left = round(left,2)
+  right = sum4 + sum5 + sum6
+  right = right/100
+  right = round(right,2)
+  
+  
+  motor.move(left,right)
+  print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
 
-  if total_sum == 0:
-    percentages = [0] * 6
-  else:
-    percentages = [(s / total_sum) * 100 for s in [sum1, sum2, sum3, sum4, sum5, sum6]]
 
-  print("Percentages: ", [round(p, 2) for p in percentages])
+  print("left :"+ str(left))
+  print("right :"+ str(right))
+  
 
 
 
