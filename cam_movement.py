@@ -6,9 +6,9 @@ import motors
 from math import pi
 
 # Open the default camera
-#cam = cv2.VideoCapture(0)
-cam = cv2.VideoCapture()
-cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
+cam = cv2.VideoCapture(0)
+# cam = cv2.VideoCapture()
+# cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
 
 
 # Get the default frame width and height
@@ -22,8 +22,12 @@ cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 fps = 0
-num_frames = 30
+num_frames = 306
+last_turn = 0 #1 -> right, 2 -> left
+minimum_speed = 3
 motor = motors.motor()
+
+
 
 while True:
   if fps == 0:
@@ -101,20 +105,37 @@ while True:
 
   left_sum = np.sum(left_half)
   right_sum = np.sum(right_half)
-
   total_sum = left_sum + right_sum
+  
   if(total_sum == 0):
         left_percentage,right_percentage = 0
+        if(last_turn == 1):
+            motor.move(40*speed/(100),0*speed/(100))
+        else:
+            motor.move(0*speed/(100),40*speed/(100))
+        print("last turn : " + str(last_turn))
+          
   else:
     left_percentage = (left_sum / total_sum) * 100
     left_percentage = round(left_percentage, 2)
     right_percentage = (right_sum / total_sum) * 100
     right_percentage = round(right_percentage, 2)
-
-
+    if(left_percentage > right_percentage):
+            last_turn = 0
+    else:
+            last_turn = 1
   speed = 4
+  
+        
+        
+        
+
+    
+ 
+
+
   print("Left: ", left_percentage, "% Right: ", right_percentage, "%")
-  motor.move(left_percentage*speed/(100*),right_percentage*speed/(100*))
+  motor.move(left_percentage*speed/(100),right_percentage*speed/(100))
   
 
 
