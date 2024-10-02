@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import argparse
 
 # Open the default camera
-cam = cv2.VideoCapture()
-cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
+cam = cv2.VideoCapture(0)
+
 
 # Get the default frame width and height
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -43,13 +43,22 @@ while True:
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
   # Define the range of red color in HSV
-  lower_red = (0, 120, 70)
-  upper_red = (10, 255, 255)
-  mask1 = cv2.inRange(hsv, lower_red, upper_red)
+  lower_blue = (100, 150, 0)
+  upper_blue = (140, 255, 255)
+  mask1 = cv2.inRange(hsv, lower_blue, upper_blue)
 
-  lower_red = (170, 120, 70)
-  upper_red = (180, 255, 255)
-  mask2 = cv2.inRange(hsv, lower_red, upper_red)
+  # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
+  mask2 = mask1
+
+  ############################################## Detect red color
+  # lower_red = (0, 120, 70)
+  # upper_red = (10, 255, 255)
+  # mask1 = cv2.inRange(hsv, lower_red, upper_red)
+
+  # lower_red = (170, 120, 70)
+  # upper_red = (180, 255, 255)
+  # mask2 = cv2.inRange(hsv, lower_red, upper_red)
+  ##############################################
 
   # Combine the masks
   mask = mask1 | mask2
