@@ -12,22 +12,16 @@ cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-cam.set(cv2.CAP_PROP_FRAME_WIDTH, 600)
-cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-# out = cv2.VideoWriter('output.mp4', fourcc, 30.0, (640, 480))
-fps = 0
 
+fps = 0
 num_frames = 30
-# right_red = 0
-# left_red = 0
 
 while True:
-  left_red = 0
-  right_red = 0
-
   if fps == 0:
     start = time.time()
 
@@ -70,13 +64,35 @@ while True:
 
   # Display the captured frame and histogram
   cv2.imshow('Camera', gray)
-  # Ignore black color in the histogram
-  gray_nonzero = gray[gray > 0]
-  plt.hist(gray_nonzero.ravel(), 256, [1, 256], color='gray')
-  plt.draw()
-  plt.pause(0.1)
-  plt.clf()
 
+  # Ignore black color in the histogram
+  # Calculate histogram using OpenCV
+  hist = cv2.calcHist([gray], [0], None, [256], [1, 256])
+
+  # Normalize the histogram
+  cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
+
+  # Create an image to display the histogram
+  hist_img = np.zeros((300, 256), dtype=np.uint8)
+
+  # Draw the histogram
+  for x in range(1, 256):
+    cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
+
+  # Display the histogram
+  cv2.imshow('Histogram', hist_img)
+
+  # Calculate the sum of gray values on the left and right halves
+  left_half = gray[:, :gray.shape[1] // 2]
+  right_half = gray[:, gray.shape[1] // 2:]
+
+  left_sum = np.sum(left_half)
+  right_sum = np.sum(right_half)
+
+  if left_sum > right_sum:
+    print("More gray on the left half of the screen")
+  else:
+    print("More gray on the right half of the screen")
 
 
   # Press 'q' to exit the loop
