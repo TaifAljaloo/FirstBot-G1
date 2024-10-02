@@ -28,6 +28,8 @@ minimum_speed = 3
 speed = 6
 motor = motors.motor()
 
+scale_size = 100
+
 right_turn_f = 0
 left_turn_f = 0
 
@@ -114,7 +116,7 @@ while True:
 
   print("Column index with highest sum:", highest_sum_index)
     
-  middle = np.interp(highest_sum_index,[0,320],[-10,10])
+  middle = np.interp(highest_sum_index,[0,320],[-scale_size,scale_size])
   
   print("middle:", middle)
   
@@ -133,11 +135,11 @@ while True:
           
   else:
     if(middle > 0):
-            right_turn_f = middle/10*speed
-            left_turn_f = 10-middle/10*speed
+            right_turn_f = middle/scale_size*speed
+            left_turn_f = scale_size-middle/scale_size*speed
     else:
-            right_turn_f = 10-abs(middle)/10*speed
-            left_turn_f = abs(middle)/10*speed
+            right_turn_f = scale_size-abs(middle)/scale_size*speed
+            left_turn_f = abs(middle)/scale_size*speed
           
     print("Left: ", right_turn_f, "% Right: ", left_turn_f, "%")
     motor.move(left_turn_f,right_turn_f)
