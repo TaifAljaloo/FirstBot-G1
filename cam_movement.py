@@ -104,6 +104,16 @@ while True:
   # Calculate the sum of gray values on the left and right halves
   left_half = gray[:, :gray.shape[1] // 2]
   right_half = gray[:, gray.shape[1] // 2:]
+  
+  
+  column_sums = np.sum(gray, axis=0)
+
+  # Find the index of the column with the highest sum
+  highest_sum_index = np.argmax(column_sums)
+
+  print("Column index with highest sum:", highest_sum_index)
+    
+  
 
   left_sum = np.sum(left_half)
   right_sum = np.sum(right_half)
