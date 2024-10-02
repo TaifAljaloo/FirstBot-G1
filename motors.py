@@ -56,6 +56,12 @@ class motor:
     def move_forward_right(self, speed):
         self.move(speed, 0)
         
+    def move_backward_left(self, speed):
+        self.move(-speed, 0)
+        
+    def move_backward_right(self, speed):
+        self.move(0, -speed)
+        
         
         
         
