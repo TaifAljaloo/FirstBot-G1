@@ -91,19 +91,29 @@ while True:
   # Display the histogram
   cv2.imshow('Histogram', hist_img)
 
-  # Calculate the sum of gray values on the left and right halves
-  left_half = gray[:, :gray.shape[1] // 2]
-  right_half = gray[:, gray.shape[1] // 2:]
+  # Calculate the sum of gray values in six equal parts
+  part1 = gray[:, :gray.shape[1] // 6]
+  part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
+  part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
+  part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
+  part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
+  part6 = gray[:, 5 * gray.shape[1] // 6:]
 
-  left_sum = np.sum(left_half)
-  right_sum = np.sum(right_half)
+  sum1 = np.sum(part1)
+  sum2 = np.sum(part2)
+  sum3 = np.sum(part3)
+  sum4 = np.sum(part4)
+  sum5 = np.sum(part5)
+  sum6 = np.sum(part6)
 
-  total_sum = left_sum + right_sum
+  total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
 
-  left_percentage = (left_sum / total_sum) * 100
-  right_percentage = (right_sum / total_sum) * 100
+  if total_sum == 0:
+    percentages = [0] * 6
+  else:
+    percentages = [(s / total_sum) * 100 for s in [sum1, sum2, sum3, sum4, sum5, sum6]]
 
-  print("Left: ", round(left_percentage, 2), "% Right: ", round(right_percentage, 2), "%")
+  print("Percentages: ", [round(p, 2) for p in percentages])
 
 
 
