@@ -1,3 +1,4 @@
 wheelbase = 52 mm
 wheel perimeter = 163.36mm
-
+distance_wheel_to_wheel = 196mm
+tire_width = 5mm
