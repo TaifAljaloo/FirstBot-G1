@@ -98,10 +98,13 @@ while True:
   left_sum = np.sum(left_half)
   right_sum = np.sum(right_half)
 
-  if left_sum > right_sum:
-    print("More gray on the left half of the screen")
-  else:
-    print("More gray on the right half of the screen")
+  total_sum = left_sum + right_sum
+
+  left_percentage = (left_sum / total_sum) * 100
+  right_percentage = (right_sum / total_sum) * 100
+
+  print("Left: ", round(left_percentage, 2), "% Right: ", round(right_percentage, 2), "%")
+
 
 
   # Press 'q' to exit the loop
