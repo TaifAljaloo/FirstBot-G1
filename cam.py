@@ -46,33 +46,20 @@ while True:
   # Convert the frame to HSV color space
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-  # Define the range of red color in HSV
-  lower_blue = (100, 150, 0)
-  upper_blue = (140, 255, 255)
-
+  # Define the range of black color in HSV
   lower_black = (0, 0, 0)
-  upper_black = (180, 255, 130)
+  upper_black = (180, 255, 50)
   
+  # Define the range of red color in HSV
   lower_red = (0, 90, 90)
   upper_red = (190, 255, 255)
   
-  mask1 = cv2.inRange(hsv, lower_black, upper_black)
-
-  # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
-  mask2 = mask1
-
-  ############################################## Detect red color
-  # lower_red = (0, 120, 70)
-  # upper_red = (10, 255, 255)
-  # mask1 = cv2.inRange(hsv, lower_red, upper_red)
-
-  # lower_red = (170, 120, 70)
-  # upper_red = (180, 255, 255)
-  # mask2 = cv2.inRange(hsv, lower_red, upper_red)
-  ##############################################
+  # Create masks for the colors
+  mask_black = cv2.inRange(hsv, lower_black, upper_black)
+  mask_red = cv2.inRange(hsv, lower_red, upper_red)
 
   # Combine the masks
-  mask = mask1 | mask2
+  mask = mask_black | mask_red
 
   # Bitwise-AND mask and original image
   frame = cv2.bitwise_and(frame, frame, mask=mask)
