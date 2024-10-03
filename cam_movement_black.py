@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 import argparse
 import motors
 
+last_time = 0
+
+current_state = 0
+
+
 def is_yellow_present(frame):
     """Detects if yellow is present in a given frame.
 
@@ -66,7 +71,11 @@ while True:
     fps = 0
     
   if(is_yellow_present(frame)):
-      print("bismillag ya du yellow")
+      if(time.time()-last_time > 5):
+            last_time = time.time()
+            current_state += 1
+            print(current_state)
+            
     
     
     
