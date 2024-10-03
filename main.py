@@ -61,7 +61,7 @@ while True:
             print("Yellow detected= ", current_state)
             last_time = time.time()
 
-    if current_state == 1 :
+    if current_state == 2 :
         print("Black detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         hsv = cv2.medianBlur(hsv, 3)
@@ -112,7 +112,7 @@ while True:
         if(not testing):
               motor.move(right,left)
 
-    if current_state == 2:
+    if current_state == 1:
         choose_color = 1
         print("Red detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
