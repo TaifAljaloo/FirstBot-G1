@@ -62,7 +62,7 @@ while True:
             last_time = time.time()
 
     if current_state == 1 and choose_color == 0:
-        print("Black detected")
+        #print("Black detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         hsv = cv2.medianBlur(hsv, 3)
         mask_black = cv2.inRange(hsv, lower_black, upper_black)
