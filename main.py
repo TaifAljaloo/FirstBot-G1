@@ -13,7 +13,7 @@ upper_black=(180,255,120)
 last_time = 0
 current_state = 0
 last_turn = 0
-testing = True
+testing = False
 choose_color = 0
 
 def is_yellow_present(frame):
@@ -54,6 +54,7 @@ while True:
     if current_state == 1 and choose_color == 0:
         print("Black detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        hsv = cv2.medianBlur(hsv, 3)
         mask_black=cv2.inRange(hsv,lower_black , upper_black)
         mask=mask_black
         frame = cv2.bitwise_and(frame, frame, mask=mask)
