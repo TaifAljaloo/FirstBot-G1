@@ -6,10 +6,30 @@ import argparse
 import motors
 
 
+class Filter:
+    def __init__(self,name,lower_limit,higher_limit):
+        self.name = name
+        self.lower_limit = lower_limit
+        self.higher_limit = higher_limit
+    def getLL(self):
+        return self.lower_limit
+    def getHL(self):
+        return self.higher_limit
+    def getName(self):
+        return self.name
+        
+        
+black_filter = Filter("black",(0, 0, 0),(360, 100, 10))
+red_filter = Filter("red",(0, 150, 150),(140, 255, 255))
+
+
+
+testing = True
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
-# motor = motors.motor()
+if(not testing):
+  motor = motors.motor()
 # Get the default frame width and height
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -22,8 +42,6 @@ fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 fps = 0
 num_frames = 30
-
-log_file = open("logs.txt", "w")
 
 while True:
   if fps == 0:
@@ -47,29 +65,10 @@ while True:
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
   # Define the range of red color in HSV
-  lower_blue = (100, 150, 0)
-  upper_blue = (140, 255, 255)
-
-  lower_black = (0, 0, 0)
-  upper_black = (180, 255, 50)
-  
-  lower_red = (0, 150, 150)
-  upper_red = (140, 255, 255)
-  
-  mask1 = cv2.inRange(hsv, lower_red, upper_red)
+  mask1 = cv2.inRange(hsv, red_filter.lower_limit, red_filter.higher_limit)
 
   # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
   mask2 = mask1
-
-  ############################################## Detect red color
-  # lower_red = (0, 120, 70)
-  # upper_red = (10, 255, 255)
-  # mask1 = cv2.inRange(hsv, lower_red, upper_red)
-
-  # lower_red = (170, 120, 70)
-  # upper_red = (180, 255, 255)
-  # mask2 = cv2.inRange(hsv, lower_red, upper_red)
-  ##############################################
 
   # Combine the masks
   mask = mask1 | mask2
@@ -81,15 +80,13 @@ while True:
   # Write the frame to the output file
   # out.write(gray)
 
-  # Turn the black color detected into blue
-  frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
 
   # Display the captured frame and histogram
   cv2.imshow('Camera', gray)
 
   # Ignore black color in the histogram
   # Calculate histogram using OpenCV
-  hist = cv2.calcHist([gray], [0], None, [256], [1, 256])
+  hist = cv2.calcHist([gray], [0], None, [256], [1, 256]) 
 
   # Normalize the histogram
   cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
@@ -126,22 +123,22 @@ while True:
   right = right/100
   right = round(right,2)
   
-  
-  # motor.move(right,left)
+  if(not testing):
+    motor.move(right,left)
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
 
 
   print("left :"+ str(left))
   print("right :"+ str(right))
+  
 
-  log_file.write(f"{str(left)} {str(right)} {time.time() - start}\n")
+
 
   # Press 'q' to exit the loop
   if cv2.waitKey(1) == ord('q'):
     break
 
-log_file.close()
 
 # Release the capture and writer objects
 cam.release()
