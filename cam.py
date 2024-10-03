@@ -48,7 +48,7 @@ while True:
 
   # Define the range of black color in HSV
   lower_black = (0, 0, 0)
-  upper_black = (180, 255, 110)
+  upper_black = (180, 255, 120)
   
   # Define the range of red color in HSV
   lower_red = (0, 90, 90)
