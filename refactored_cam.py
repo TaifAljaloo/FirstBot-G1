@@ -66,7 +66,7 @@ def get_histogramme_from_frame(cam,filter):
 def get_speeds(filter,cam):
       
   # Convert the frame to  HSV color space
-  hist,gray = get_histogramme_from_frame(filter)
+  hist,gray = get_histogramme_from_frame(cam,filter)
   # Create an image to display the histogram
   hist_img = np.zeros((300, 256), dtype=np.uint8)
 
