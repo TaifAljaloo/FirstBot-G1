@@ -1,16 +1,16 @@
 import cv2
 import time
 import numpy as np
+import matplotlib.pyplot as plt
 import argparse
 import motors
-from math import pi
 
+testing = True
 # Open the default camera
 cam = cv2.VideoCapture(0)
-# cam = cv2.VideoCapture()
-# cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
 
-
+if(not testing):
+  motor = motors.motor()
 # Get the default frame width and height
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -22,16 +22,7 @@ cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 fps = 0
-num_frames = 306
-last_turn = 0 #1 -> right, 2 -> left
-minimum_speed = 3
-speed = 6
-motor = motors.motor()
-
-scale_size = 100
-
-right_turn_f = 0
-left_turn_f = 0
+num_frames = 30
 
 while True:
   if fps == 0:
@@ -57,20 +48,17 @@ while True:
   # Define the range of red color in HSV
   lower_blue = (100, 150, 0)
   upper_blue = (140, 255, 255)
-  mask1 = cv2.inRange(hsv, lower_blue, upper_blue)
+  
+  lower_black = (0, 0, 0)
+  upper_black = (360, 100, 10)
+  
+  lower_red = (0, 150, 150)
+  upper_red = (140, 255, 255)
+  
+  mask1 = cv2.inRange(hsv, lower_red, upper_red)
 
   # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
   mask2 = mask1
-
-  ############################################## Detect red color
-  # lower_red = (0, 120, 70)
-  # upper_red = (10, 255, 255)
-  # mask1 = cv2.inRange(hsv, lower_red, upper_red)
-
-  # lower_red = (170, 120, 70)
-  # upper_red = (180, 255, 255)
-  # mask2 = cv2.inRange(hsv, lower_red, upper_red)
-  ##############################################
 
   # Combine the masks
   mask = mask1 | mask2
@@ -88,7 +76,7 @@ while True:
 
   # Ignore black color in the histogram
   # Calculate histogram using OpenCV
-  hist = cv2.calcHist([gray], [0], None, [256], [1, 256])
+  hist = cv2.calcHist([gray], [0], None, [256], [1, 256]) 
 
   # Normalize the histogram
   cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
@@ -103,44 +91,45 @@ while True:
   # Display the histogram
   cv2.imshow('Histogram', hist_img)
 
-  print( np.argmax(gray))
-  # Calculate the sum of gray values on the left and right halves
-  left_half = gray[:, :gray.shape[1] // 2]
-  right_half = gray[:, gray.shape[1] // 2:]
+  # Calculate the sum of gray values in six equal parts
+  part1 = gray[:, :gray.shape[1] // 6]
+  part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
+  part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
+  part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
+  part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
+  part6 = gray[:, 5 * gray.shape[1] // 6:]
+  sum1 = np.sum(part1)/10000 * 15
+  sum2 = np.sum(part2)/10000 * 10
+  sum3 = np.sum(part3)/10000 * 5
+  sum4 = np.sum(part4)/10000 * 5
+  sum5 = np.sum(part5)/10000 * 10
+  sum6 = np.sum(part6)/10000 * 15
   
   
-  column_sums = np.sum(gray, axis=0)
-
-  # Find the index of the column with the highest sum
-  highest_sum_index = np.argmax(column_sums)
-
-  print("Column index with highest sum:", highest_sum_index)
-    
-  middle = np.interp(highest_sum_index,[0,320],[-scale_size,scale_size])
+  left = sum1 + sum2 + sum3
+  left = left/ 100
+  left = round(left,2)
+  right = sum4 + sum5 + sum6
+  right = right/100
+  right = round(right,2)
   
-  print("middle:", middle)
-  if(middle == -100 or middle == 100):
-    motor.move(0,0)
+  if(not testing):
+    motor.move(right,left)
+  print()
+  total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
 
 
-  else:
-    if(middle > 0):
-            right_turn_f = middle/scale_size*speed
-            left_turn_f = scale_size-middle/scale_size*speed
-    else:
-            right_turn_f = scale_size-abs(middle)/scale_size*speed
-            left_turn_f = abs(middle)/scale_size*speed
-          
-    print("Left: ", left_turn_f, "% Right: ", right_turn_f, "%")
-    motor.move(right_turn_f/10,left_turn_f/10)
+  print("left :"+ str(left))
+  print("right :"+ str(right))
   
+
 
 
   # Press 'q' to exit the loop
   if cv2.waitKey(1) == ord('q'):
     break
 
-motor.stop()  
+
 # Release the capture and writer objects
 cam.release()
 # out.release()
