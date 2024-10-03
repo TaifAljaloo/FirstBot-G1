@@ -86,35 +86,33 @@ while True:
         part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
         part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
         part6 = gray[:, 5 * gray.shape[1] // 6:]
-        sum1 = np.sum(part1) / 100000 * 3
-        sum2 = np.sum(part2) / 100000 * 3
-        sum3 = np.sum(part3) / 100000 * 3
-        sum4 = np.sum(part4) / 100000 * 3
-        sum5 = np.sum(part5) / 100000 * 3
-        sum6 = np.sum(part6) / 100000 * 3
-
+        sum1 = np.sum(part1)/100000 * 3
+        sum2 = np.sum(part2)/100000 * 3
+        sum3 = np.sum(part3)/100000 * 3
+        sum4 = np.sum(part4)/100000 * 3
+        sum5 = np.sum(part5)/100000 * 3
+        sum6 = np.sum(part6)/100000 * 3
         left = sum1 + sum2 + sum3
-        left = left / 10
-        left = round(left, 2)
+        left = left/ 10
+        left = round(left,2)
         right = sum4 + sum5 + sum6
-        right = right / 10
-        right = round(right, 2)
-
-        print("Left: ", left)
-        print("Right: ", right)
+        right = right/10
+        right = round(right,2)
+        print()
         total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
-        if left > right and left > 3:
-            last_turn = 0
-        elif right > left and right > 3:
-            last_turn = 1
-        if left + right < 3:
-            if last_turn:
+        if(left > right and left > 3):
+          last_turn = 0;
+        elif(right> left and right > 3):
+          last_turn = 1;
+        if(left+right < 3 ):
+          if(last_turn):
                 right = 3
-            else:
+          else:
                 left = 3
-
-        if not testing:
-            motor.move(left, right)
+                print("left :"+ str(left))
+        print("right :"+ str(right))
+        if(not testing):
+              motor.move(right,left)
 
     if current_state == 2 and choose_color == 0:
         choose_color = 1
