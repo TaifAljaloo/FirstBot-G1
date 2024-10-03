@@ -11,7 +11,7 @@ upper_black = (180, 255, 120)
 last_time = 0
 current_state = 0
 last_turn = 0
-testing = True
+testing = False
 choose_color = 0
 
 def is_yellow_present(frame):
@@ -44,12 +44,12 @@ frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-
+start_time = time.time()
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 while True:
     ret, frame = cam.read()
-    start_time = time.time()
+    
 
     if not ret:
         print("Error: Failed to capture image.")
