@@ -44,11 +44,11 @@ while True:
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
   # Reduce light glare by applying a median blur
-  hsv = cv2.medianBlur(hsv, 5)
+  hsv = cv2.medianBlur(hsv, 3)
 
   # Define the range of black color in HSV
   lower_black = (0, 0, 0)
-  upper_black = (180, 255, 110)
+  upper_black = (180, 255, 120)
   
   # Define the range of red color in HSV
   lower_red = (0, 90, 90)
