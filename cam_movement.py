@@ -57,8 +57,8 @@ while True:
   lower_black = (0, 0, 0)
   upper_black = (360, 100, 10)
   
-  lower_red = (0, 120, 120)
-  upper_red = (180, 255, 255)
+  lower_red = (0, 110, 110)
+  upper_red = (200, 255, 255)
   
   mask1 = cv2.inRange(hsv, lower_red, upper_red)
 
@@ -117,8 +117,7 @@ while True:
   right = sum4 + sum5 + sum6
   right = right/100
   right = round(right,2)
-  if(not testing):
-    motor.move(right,left)
+ 
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
   if(left > right):
@@ -133,7 +132,8 @@ while True:
  
   print("left :"+ str(left))
   print("right :"+ str(right))
-  
+  if(not testing):
+        motor.move(right,left)
 
 
 
