@@ -57,8 +57,8 @@ while True:
   lower_black = (0, 0, 0)
   upper_black = (360, 100, 10)
   
-  lower_red = (0, 150, 150)
-  upper_red = (140, 255, 255)
+  lower_red = (0, 120, 120)
+  upper_red = (180, 255, 255)
   
   mask1 = cv2.inRange(hsv, lower_red, upper_red)
 

@@ -65,14 +65,7 @@ while True:
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
   # Define the range of red color in HSV
-  
-  lower_black = (0, 0, 0)
-  upper_black = (360, 100, 10)
-  
-  lower_red = (0, 150, 150)
-  upper_red = (140, 255, 255)
-  
-  mask1 = cv2.inRange(hsv, lower_red, upper_red)
+  mask1 = cv2.inRange(hsv, red_filter.lower_limit, red_filter.higher_limit)
 
   # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
   mask2 = mask1
