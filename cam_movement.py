@@ -88,7 +88,7 @@ while True:
     cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
 
   # Display the histogram
-  cv2.imshow('Histogram', hist_img)
+    cv2.imshow('Histogram', hist_img)
 
     # Calculate the sum of gray values in six equal parts
     part1 = gray[:, :gray.shape[1] // 6]
