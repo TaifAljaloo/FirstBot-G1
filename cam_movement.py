@@ -8,7 +8,7 @@ import motors
 
 last_turn = 0
 
-testing = True
+testing = False
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
@@ -121,10 +121,10 @@ while True:
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
   if(left > right and total_sum > 1):
-    last_turn = 1;
-  elif(right< left and total_sum > 1):
     last_turn = 0;
-  if(total_sum < 3 ):
+  elif(right< left and total_sum > 1):
+    last_turn = 1;
+  if(left+right < 3 ):
     if(last_turn):
           right = 3
     else:
