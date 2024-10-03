@@ -97,12 +97,12 @@ while True:
   part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
   part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
   part6 = gray[:, 5 * gray.shape[1] // 6:]
-  sum1 = np.sum(part1)/100000 * 6
-  sum2 = np.sum(part2)/100000 * 4
-  sum3 = np.sum(part3)/100000 * 5
-  sum4 = np.sum(part4)/100000 * 5
-  sum5 = np.sum(part5)/100000 * 4
-  sum6 = np.sum(part6)/100000 * 6
+  sum1 = np.sum(part1)/10000 * 6
+  sum2 = np.sum(part2)/10000 * 4
+  sum3 = np.sum(part3)/10000 * 5
+  sum4 = np.sum(part4)/10000 * 5
+  sum5 = np.sum(part5)/10000 * 4
+  sum6 = np.sum(part6)/10000 * 6
 
   
   if(isBlack):
