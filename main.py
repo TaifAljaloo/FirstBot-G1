@@ -131,40 +131,37 @@ while True:
             cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
 
         cv2.imshow('Histogram', hist_img)
-
         part1 = gray[:, :gray.shape[1] // 6]
         part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
         part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
         part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
         part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
         part6 = gray[:, 5 * gray.shape[1] // 6:]
-        sum1 = np.sum(part1)/10000 * 15
-        sum2 = np.sum(part2)/10000 * 10
-        sum3 = np.sum(part3)/10000 * 5
-        sum4 = np.sum(part4)/10000 * 5
-        sum5 = np.sum(part5)/10000 * 10
-        sum6 = np.sum(part6)/10000 * 15
+        sum1 = np.sum(part1)/100000 * 6
+        sum2 = np.sum(part2)/100000 * 4
+        sum3 = np.sum(part3)/100000 * 5
+        sum4 = np.sum(part4)/100000 * 5
+        sum5 = np.sum(part5)/100000 * 4
+        sum6 = np.sum(part6)/100000 * 6
         left = sum1 + sum2 + sum3
         left = left/ 100
         left = round(left,2)
         right = sum4 + sum5 + sum6
         right = right/100
         right = round(right,2)
-
-        print()
+        
         total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
-        print("left :"+ str(left))
-        print("right :"+ str(right))
-        if(left > right and left > 3):
-          last_turn = 0;
-        elif(right> left and right > 3):
+        if(left > right and total_sum > 1):
           last_turn = 1;
-        if(left+right < 3 ):
+        elif(right< left and total_sum > 1):
+          last_turn = 0;
+        if(total_sum < 3 ):
           if(last_turn):
                 right = 3
           else:
                 left = 3
 
+        print("Left: ", left, " Right: ", right)
         if not testing:
             motor.move(left, right)
 
