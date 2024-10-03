@@ -53,10 +53,10 @@ while True:
   lower_black = (0, 0, 0)
   upper_black = (180, 255, 50)
   
-  lower_red = (0, 150, 150)
-  upper_red = (140, 255, 255)
+  lower_red = (0, 90, 90)
+  upper_red = (190, 255, 255)
   
-  mask1 = cv2.inRange(hsv, lower_red, upper_red)
+  mask1 = cv2.inRange(hsv, lower_black, upper_black)
 
   # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
   mask2 = mask1
