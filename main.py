@@ -57,7 +57,7 @@ while True:
 
     if is_yellow_present(frame):
         print("Yellow detected")
-        if time.time() - last_time > 5:
+        if time.time() - last_time > 20:
             current_state += 1
             last_time = time.time()
 
