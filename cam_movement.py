@@ -8,7 +8,7 @@ import motors
 
 last_turn = 0
 
-testing = False
+testing = True
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
@@ -103,12 +103,12 @@ while True:
   part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
   part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
   part6 = gray[:, 5 * gray.shape[1] // 6:]
-  sum1 = np.sum(part1)/10000 * 12
-  sum2 = np.sum(part2)/10000 * 8
-  sum3 = np.sum(part3)/10000 * 3
-  sum4 = np.sum(part4)/10000 * 3
-  sum5 = np.sum(part5)/10000 * 8
-  sum6 = np.sum(part6)/10000 * 12
+  sum1 = np.sum(part1)/100000 * 4
+  sum2 = np.sum(part2)/100000 * 4
+  sum3 = np.sum(part3)/100000 * 2
+  sum4 = np.sum(part4)/100000 * 2
+  sum5 = np.sum(part5)/100000 * 4
+  sum6 = np.sum(part6)/100000 * 4
   
   
   left = sum1 + sum2 + sum3
