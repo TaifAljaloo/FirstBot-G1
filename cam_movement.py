@@ -120,9 +120,9 @@ while True:
  
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
-  if(left > right and total_sum > 1):
+  if(left > right and left > 3):
     last_turn = 0;
-  elif(right< left and total_sum > 1):
+  elif(right> left and right > 3):
     last_turn = 1;
   if(left+right < 3 ):
     if(last_turn):
