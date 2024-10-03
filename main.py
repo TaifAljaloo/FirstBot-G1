@@ -70,7 +70,7 @@ while True:
         frame = cv2.bitwise_and(frame, frame, mask=mask)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
-        cv2.imshow('Camera', frame)
+        cv2.imshow('Camera', gray)
         hist = cv2.calcHist([gray], [0], None, [256], [1, 256])
         cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
         hist_img = np.zeros((300, 256), dtype=np.uint8)
@@ -100,7 +100,8 @@ while True:
         right = right / 10
         right = round(right, 2)
 
-        print()
+        print("Left: ", left)
+        print("Right: ", right)
         total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
         if left > right and left > 3:
             last_turn = 0
