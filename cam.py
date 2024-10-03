@@ -47,7 +47,14 @@ while True:
   # Define the range of red color in HSV
   lower_blue = (100, 150, 0)
   upper_blue = (140, 255, 255)
-  mask1 = cv2.inRange(hsv, lower_blue, upper_blue)
+  
+  lower_black = (0, 0, 0)
+  upper_black = (360, 100, 10)
+  
+  lower_red = (0, 150, 150)
+  upper_red = (140, 255, 255)
+  
+  mask1 = cv2.inRange(hsv, lower_black, upper_black)
 
   # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
   mask2 = mask1
