@@ -7,7 +7,7 @@ import motors
 
 
 last_turn = 0
-isBlack = 1
+isBlack = 0
 testing = False
 # Open the default camera
 cam = cv2.VideoCapture(0)
@@ -18,8 +18,8 @@ if(not testing):
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
-cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 720)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
