@@ -6,7 +6,7 @@ import argparse
 import motors
 
 last_turn = 0
-testing = True
+testing = False
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
