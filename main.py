@@ -22,7 +22,23 @@ def is_yellow_present(frame):
     return np.any(mask)
 
 motor = motors.motor()
-cam = cv2.VideoCapture(0)
+
+# Try different camera indices if the default one doesn't work
+camera_indices = [0, 1, 2]
+cam = None
+for index in camera_indices:
+    cam = cv2.VideoCapture(index)
+    if cam.isOpened():
+        print(f"Camera opened successfully with index {index}")
+        break
+    else:
+        cam.release()
+        cam = None
+
+if cam is None:
+    print("Error: Could not open any camera.")
+    exit()
+
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
@@ -164,7 +180,3 @@ while True:
     # Press 'q' to exit the loop
     if cv2.waitKey(1) == ord('q'):
         break
-
-# Release the capture and writer objects
-cam.release()
-cv2.destroyAllWindows()
