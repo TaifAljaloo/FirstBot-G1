@@ -161,12 +161,12 @@ while True:
     part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
     part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
     part6 = gray[:, 5 * gray.shape[1] // 6:]
-    sum1 = np.sum(part1)/10000 * 15
-    sum2 = np.sum(part2)/10000 * 10
-    sum3 = np.sum(part3)/10000 * 5
-    sum4 = np.sum(part4)/10000 * 5
-    sum5 = np.sum(part5)/10000 * 10
-    sum6 = np.sum(part6)/10000 * 15
+    sum1 = np.sum(part1)/1000 * 1
+    sum2 = np.sum(part2)/1000 * 1
+    sum3 = np.sum(part3)/1000 * 1
+    sum4 = np.sum(part4)/1000 * 1
+    sum5 = np.sum(part5)/1000 * 1
+    sum6 = np.sum(part6)/1000 * 1
     
     
     
