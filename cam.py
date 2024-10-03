@@ -9,7 +9,7 @@ import motors
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
-motor = motors.motor()
+# motor = motors.motor()
 # Get the default frame width and height
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -51,12 +51,12 @@ while True:
   upper_blue = (140, 255, 255)
 
   lower_black = (0, 0, 0)
-  upper_black = (360, 100, 10)
+  upper_black = (180, 255, 50)
   
   lower_red = (0, 150, 150)
   upper_red = (140, 255, 255)
   
-  mask1 = cv2.inRange(hsv, lower_black, upper_black)
+  mask1 = cv2.inRange(hsv, lower_red, upper_red)
 
   # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
   mask2 = mask1
@@ -81,6 +81,8 @@ while True:
   # Write the frame to the output file
   # out.write(gray)
 
+  # Turn the black color detected into blue
+  frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
 
   # Display the captured frame and histogram
   cv2.imshow('Camera', gray)
@@ -125,7 +127,7 @@ while True:
   right = round(right,2)
   
   
-  motor.move(right,left)
+  # motor.move(right,left)
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
 
