@@ -8,7 +8,7 @@ import motors
 
 last_turn = 0
 isBlack = 1
-testing = False
+testing = True
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
