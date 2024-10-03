@@ -56,13 +56,13 @@ while True:
         break
 
     if is_yellow_present(frame):
-        print("Yellow detected")
         if time.time() - last_time > 20:
             current_state += 1
+            print("Yellow detected= ", current_state)
             last_time = time.time()
 
-    if current_state == 1 and choose_color == 0:
-        #print("Black detected")
+    if current_state == 1 :
+        print("Black detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         hsv = cv2.medianBlur(hsv, 3)
         mask_black = cv2.inRange(hsv, lower_black, upper_black)
@@ -109,12 +109,10 @@ while True:
                 right = 3
           else:
                 left = 3
-                print("left :"+ str(left))
-        print("right :"+ str(right))
         if(not testing):
               motor.move(right,left)
 
-    if current_state == 2 and choose_color == 0:
+    if current_state == 2:
         choose_color = 1
         print("Red detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -168,7 +166,7 @@ while True:
         if not testing:
             motor.move(left, right)
 
-    if current_state == 3 and choose_color == 1:
+    if current_state == 3:
         motor.stop()
         motor.unclock()
         print("Finished")
