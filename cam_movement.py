@@ -5,7 +5,10 @@ import matplotlib.pyplot as plt
 import argparse
 import motors
 
-testing = True
+
+last_turn = 0
+
+testing = False
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
@@ -20,6 +23,8 @@ cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+
+
 
 fps = 0
 num_frames = 30
@@ -98,12 +103,12 @@ while True:
   part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
   part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
   part6 = gray[:, 5 * gray.shape[1] // 6:]
-  sum1 = np.sum(part1)/10000 * 15
-  sum2 = np.sum(part2)/10000 * 10
-  sum3 = np.sum(part3)/10000 * 5
-  sum4 = np.sum(part4)/10000 * 5
-  sum5 = np.sum(part5)/10000 * 10
-  sum6 = np.sum(part6)/10000 * 15
+  sum1 = np.sum(part1)/10000 * 12
+  sum2 = np.sum(part2)/10000 * 8
+  sum3 = np.sum(part3)/10000 * 3
+  sum4 = np.sum(part4)/10000 * 3
+  sum5 = np.sum(part5)/10000 * 8
+  sum6 = np.sum(part6)/10000 * 12
   
   
   left = sum1 + sum2 + sum3
@@ -112,13 +117,20 @@ while True:
   right = sum4 + sum5 + sum6
   right = right/100
   right = round(right,2)
-  
   if(not testing):
     motor.move(right,left)
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
-
-
+  if(left > right):
+    last_turn = 1;
+  else:
+    last_turn = 0;
+  if(total_sum < 3):
+    if(last_turn):
+          right = 3
+    else:
+          left = 3
+ 
   print("left :"+ str(left))
   print("right :"+ str(right))
   
