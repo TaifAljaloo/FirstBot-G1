@@ -42,8 +42,8 @@ if cam is None:
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-cam.set(cv2.CAP_PROP_FRAME_WIDTH, 720)
-cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 start_time = time.time()
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
