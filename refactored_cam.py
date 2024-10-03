@@ -110,7 +110,8 @@ def main():
   robo = LineFollower(3,12,motors.motor())
   
   while(True):
-        robo.setSpeed(get_speeds(red_filter,cam))
+        left,right = get_speeds(red_filter,cam)
+        robo.setSpeed(left,right)
         
   cam.release()
   cv2.destroyAllWindows()
