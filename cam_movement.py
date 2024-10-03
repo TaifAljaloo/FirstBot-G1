@@ -7,7 +7,7 @@ import motors
 
 
 last_turn = 0
-
+isBlack = 1
 testing = False
 # Open the default camera
 cam = cv2.VideoCapture(0)
@@ -59,56 +59,123 @@ while True:
   
   lower_red = (0, 90, 90)
   upper_red = (190, 255, 255)
+  if(not isBlack):
+    mask1 = cv2.inRange(hsv, lower_red, upper_red)
+
+    # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
+    mask2 = mask1
+
+    # Combine the masks
+    mask = mask1 | mask2
+
+    # Bitwise-AND mask and original image
+    frame = cv2.bitwise_and(frame, frame, mask=mask)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
+
+    # Write the frame to the output file
+    # out.write(gray)
+
+
+    # Display the captured frame and histogram
+    cv2.imshow('Camera', gray)
+
+    # Ignore black color in the histogram
+    # Calculate histogram using OpenCV
+    hist = cv2.calcHist([gray], [0], None, [256], [1, 256]) 
+
+    # Normalize the histogram
+    cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
+
+    # Create an image to display the histogram
+    hist_img = np.zeros((300, 256), dtype=np.uint8)
+
+    # Draw the histogram
+    for x in range(1, 256):
+      cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
+
+    # Display the histogram
+    cv2.imshow('Histogram', hist_img)
+
+    # Calculate the sum of gray values in six equal parts
+    part1 = gray[:, :gray.shape[1] // 6]
+    part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
+    part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
+    part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
+    part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
+    part6 = gray[:, 5 * gray.shape[1] // 6:]
+    sum1 = np.sum(part1)/100000 * 6
+    sum2 = np.sum(part2)/100000 * 4
+    sum3 = np.sum(part3)/100000 * 5
+    sum4 = np.sum(part4)/100000 * 5
+    sum5 = np.sum(part5)/100000 * 4
+    sum6 = np.sum(part6)/100000 * 6
   
-  mask1 = cv2.inRange(hsv, lower_red, upper_red)
+  
+  if(isBlack):
+    mask1 = cv2.inRange(hsv, lower_black, upper_black)
 
-  # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
-  mask2 = mask1
+    # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
+    mask2 = mask1
 
-  # Combine the masks
-  mask = mask1 | mask2
+    ############################################## Detect red color
+    # lower_red = (0, 120, 70)
+    # upper_red = (10, 255, 255)
+    # mask1 = cv2.inRange(hsv, lower_red, upper_red)
 
-  # Bitwise-AND mask and original image
-  frame = cv2.bitwise_and(frame, frame, mask=mask)
-  gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
+    # lower_red = (170, 120, 70)
+    # upper_red = (180, 255, 255)
+    # mask2 = cv2.inRange(hsv, lower_red, upper_red)
+    ##############################################
 
-  # Write the frame to the output file
-  # out.write(gray)
+    # Combine the masks
+    mask = mask1 | mask2
 
+    # Bitwise-AND mask and original image
+    frame = cv2.bitwise_and(frame, frame, mask=mask)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
 
-  # Display the captured frame and histogram
-  cv2.imshow('Camera', gray)
+    # Write the frame to the output file
+    # out.write(gray)
 
-  # Ignore black color in the histogram
-  # Calculate histogram using OpenCV
-  hist = cv2.calcHist([gray], [0], None, [256], [1, 256]) 
+    # Turn the black color detected into blue
+    frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
 
-  # Normalize the histogram
-  cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
+    # Display the captured frame and histogram
+    cv2.imshow('Camera', gray)
 
-  # Create an image to display the histogram
-  hist_img = np.zeros((300, 256), dtype=np.uint8)
+    # Ignore black color in the histogram
+    # Calculate histogram using OpenCV
+    hist = cv2.calcHist([gray], [0], None, [256], [1, 256])
 
-  # Draw the histogram
-  for x in range(1, 256):
-    cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
+    # Normalize the histogram
+    cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
 
-  # Display the histogram
-  cv2.imshow('Histogram', hist_img)
+    # Create an image to display the histogram
+    hist_img = np.zeros((300, 256), dtype=np.uint8)
 
-  # Calculate the sum of gray values in six equal parts
-  part1 = gray[:, :gray.shape[1] // 6]
-  part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
-  part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
-  part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
-  part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
-  part6 = gray[:, 5 * gray.shape[1] // 6:]
-  sum1 = np.sum(part1)/100000 * 6
-  sum2 = np.sum(part2)/100000 * 4
-  sum3 = np.sum(part3)/100000 * 5
-  sum4 = np.sum(part4)/100000 * 5
-  sum5 = np.sum(part5)/100000 * 4
-  sum6 = np.sum(part6)/100000 * 6
+    # Draw the histogram
+    for x in range(1, 256):
+      cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
+
+    # Display the histogram
+    cv2.imshow('Histogram', hist_img)
+
+    # Calculate the sum of gray values in six equal parts
+    part1 = gray[:, :gray.shape[1] // 6]
+    part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
+    part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
+    part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
+    part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
+    part6 = gray[:, 5 * gray.shape[1] // 6:]
+    sum1 = np.sum(part1)/10000 * 15
+    sum2 = np.sum(part2)/10000 * 10
+    sum3 = np.sum(part3)/10000 * 5
+    sum4 = np.sum(part4)/10000 * 5
+    sum5 = np.sum(part5)/10000 * 10
+    sum6 = np.sum(part6)/10000 * 15
+    
+    
+    
   
   
   left = sum1 + sum2 + sum3
