@@ -3,7 +3,12 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import motors
-from color import Color
+from enum import Enum
+
+class Color(Enum):
+    RED=[0,90,90],[190,255,255] 
+    YELLOW=[20,100,100],[40,255,255]
+    BLACK=[0,0,0],[180,255,120]
 
 last_time = 0
 current_state = 0
