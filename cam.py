@@ -46,9 +46,12 @@ while True:
   # Convert the frame to HSV color space
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
+  # Reduce light glare by applying a median blur
+  hsv = cv2.medianBlur(hsv, 5)
+
   # Define the range of black color in HSV
   lower_black = (0, 0, 0)
-  upper_black = (180, 255, 120)
+  upper_black = (180, 255, 50)
   
   # Define the range of red color in HSV
   lower_red = (0, 90, 90)
@@ -59,7 +62,7 @@ while True:
   mask_red = cv2.inRange(hsv, lower_red, upper_red)
 
   # Combine the masks
-  mask = mask_black | mask_red
+  mask = mask_black
 
   # Bitwise-AND mask and original image
   frame = cv2.bitwise_and(frame, frame, mask=mask)
