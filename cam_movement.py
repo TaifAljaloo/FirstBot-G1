@@ -57,8 +57,8 @@ while True:
   lower_black = (0, 0, 0)
   upper_black = (360, 100, 10)
   
-  lower_red = (0, 110, 110)
-  upper_red = (200, 255, 255)
+  lower_red = (0, 90, 90)
+  upper_red = (190, 255, 255)
   
   mask1 = cv2.inRange(hsv, lower_red, upper_red)
 
@@ -103,12 +103,12 @@ while True:
   part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
   part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
   part6 = gray[:, 5 * gray.shape[1] // 6:]
-  sum1 = np.sum(part1)/100000 * 4
+  sum1 = np.sum(part1)/100000 * 6
   sum2 = np.sum(part2)/100000 * 4
-  sum3 = np.sum(part3)/100000 * 2
-  sum4 = np.sum(part4)/100000 * 2
+  sum3 = np.sum(part3)/100000 * 5
+  sum4 = np.sum(part4)/100000 * 5
   sum5 = np.sum(part5)/100000 * 4
-  sum6 = np.sum(part6)/100000 * 4
+  sum6 = np.sum(part6)/100000 * 6
   
   
   left = sum1 + sum2 + sum3
@@ -120,11 +120,11 @@ while True:
  
   print()
   total_sum = sum1 + sum2 + sum3 + sum4 + sum5 + sum6
-  if(left > right):
+  if(left > right and total_sum > 1):
     last_turn = 1;
-  else:
+  elif(right< left and total_sum > 1):
     last_turn = 0;
-  if(total_sum < 3):
+  if(total_sum < 3 ):
     if(last_turn):
           right = 3
     else:
