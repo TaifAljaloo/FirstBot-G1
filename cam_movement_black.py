@@ -106,10 +106,10 @@ while True:
   sum6 = np.sum(part6)/100000 * 6
 
   left = sum1 + sum2 + sum3
-  left = left/ 100
+  left = left/ 10
   left = round(left,2)
   right = sum4 + sum5 + sum6
-  right = right/100
+  right = right/10
   right = round(right,2)
   
   print()
