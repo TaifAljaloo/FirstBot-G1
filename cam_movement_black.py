@@ -5,6 +5,31 @@ import matplotlib.pyplot as plt
 import argparse
 import motors
 
+def is_yellow_present(frame):
+    """Detects if yellow is present in a given frame.
+
+    Args:
+        frame: The input frame in BGR format.
+
+    Returns:
+        True if yellow is present, False otherwise.
+    """
+
+    # Convert the frame to HSV color space
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # Define the yellow color range in HSV
+    yellow_lower = np.array([20, 100, 100])  # Adjust these values as needed
+    yellow_upper = np.array([40, 255, 255])
+
+    # Create a mask for yellow pixels
+    mask = cv2.inRange(hsv, yellow_lower, yellow_upper)
+
+    # Check if there are any yellow pixels in the mask
+    return np.any(mask)
+
+
+
 last_turn = 0
 testing = False
 # Open the default camera
@@ -39,6 +64,11 @@ while True:
     seconds = end - start
     print("FPS: ", num_frames / seconds)
     fps = 0
+    
+  if(is_yellow_present(frame)):
+      print("bismillag ya du yellow")
+    
+    
     
   # Convert the frame to HSV color space
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -128,7 +158,7 @@ while True:
   print("right :"+ str(right))
   if(not testing):
         motor.move(right,left)
-
+  
 
 
   # Press 'q' to exit the loop
