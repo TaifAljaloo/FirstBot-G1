@@ -37,7 +37,7 @@ def setup_cam(width,height):
   return cam 
       
 
-def get_histogramme_from_frame(hist,filter):
+def get_histogramme_from_frame(filter):
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
   # Define the range of red color in HSV
@@ -68,9 +68,9 @@ def get_histogramme_from_frame(hist,filter):
   cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
   return hist,gray
 
-def get_speeds():
+def get_speeds(filter):
   # Convert the frame to  HSV color space
-  hist,gray = get_histogramme_from_frame()
+  hist,gray = get_histogramme_from_frame(filter)
   # Create an image to display the histogram
   hist_img = np.zeros((300, 256), dtype=np.uint8)
 
@@ -113,7 +113,7 @@ def main():
   robo = LineFollower(3,12,motors.motor())
   
   while(True):
-        print(get_speeds())
+        print(get_speeds(red_filter))
         robo.setSpeed(get_speeds())
         
   cam.release()
