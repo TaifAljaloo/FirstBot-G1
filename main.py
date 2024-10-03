@@ -5,16 +5,16 @@ import matplotlib.pyplot as plt
 import motors
 from enum import Enum
 
-class Color(Enum):
-    RED=[0,90,90],[190,255,255] 
-    YELLOW=[20,100,100],[40,255,255]
-    BLACK=[0,0,0],[180,255,120]
 
+lower_red=(0,90,90)
+upper_red=(190,255,255) 
+lower_black=(0,0,0)
+upper_black=(180,255,120)
 last_time = 0
 current_state = 0
 last_turn = 0
 testing = True
-choose_color = Color.BLACK
+choose_color = 0
 
 def is_yellow_present(frame):
 
@@ -51,10 +51,10 @@ while True:
             current_state = 1
             last_time = time.time()
             
-    if current_state == 1 and choose_color == Color.BLACK:
+    if current_state == 1 and choose_color == 0:
         print("Black detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        mask_black=cv2.inRange(hsv, choose_color.value[0], choose_color.value[1])
+        mask_black=cv2.inRange(hsv,lower_black , upper_black)
         mask=mask_black
         frame = cv2.bitwise_and(frame, frame, mask=mask)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -107,11 +107,11 @@ while True:
         if(not testing):
             motor.move(left, right)
             
-    if current_state == 2 and choose_color == Color.BLACK:
-        choose_color = Color.RED
+    if current_state == 2 and choose_color == 0:
+        choose_color = 1
         print("Red detected")
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        mask1=cv2.inRange(hsv, choose_color.value[0], choose_color.value[1])
+        mask1=cv2.inRange(hsv, lower_red, upper_red)
         mask2=mask1
         mask=mask1|mask2
         frame = cv2.bitwise_and(frame, frame, mask=mask)
@@ -170,7 +170,7 @@ while True:
         if(not testing):
             motor.move(left, right)
             
-    if current_state == 3 and choose_color == Color.RED:
+    if current_state == 3 and choose_color == 1:
         motor.stop()
         motor.unclock()
         print("Finished")
