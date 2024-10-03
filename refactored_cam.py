@@ -37,26 +37,21 @@ def setup_cam(width,height):
   return cam 
       
 
-def get_histogramme_from_frame(filter):
+def get_histogramme_from_frame(cam,filter):
+  ret, frame = cam.read()
   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
   # Define the range of red color in HSV
   mask1 = cv2.inRange(hsv, filter.lower_limit, filter.higher_limit)
-
   # No need for a second mask for blue as it doesn't wrap around the HSV spectrum
   mask2 = mask1
-
   # Combine the masks
   mask = mask1 | mask2
-
   # Bitwise-AND mask and original image
   frame = cv2.bitwise_and(frame, frame, mask=mask)
   gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
 
   # Write the frame to the output file
-  # out.write(gray)
-
-
+  # out.write(gray
   # Display the captured frame and histogram
   cv2.imshow('Camera', gray)
 
@@ -68,7 +63,8 @@ def get_histogramme_from_frame(filter):
   cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
   return hist,gray
 
-def get_speeds(filter):
+def get_speeds(filter,cam):
+      
   # Convert the frame to  HSV color space
   hist,gray = get_histogramme_from_frame(filter)
   # Create an image to display the histogram
@@ -108,13 +104,13 @@ def get_speeds(filter):
 
 def main():
   cam = setup_cam(320,240)      
+  
   black_filter = Filter("black",(0, 0, 0),(360, 100, 10))
   red_filter = Filter("red",(0, 90, 90),(190, 255, 255))
   robo = LineFollower(3,12,motors.motor())
   
   while(True):
-        print(get_speeds(red_filter))
-        robo.setSpeed(get_speeds())
+        robo.setSpeed(get_speeds(red_filter,cam))
         
   cam.release()
   cv2.destroyAllWindows()
