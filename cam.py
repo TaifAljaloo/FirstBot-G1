@@ -7,7 +7,8 @@ import motors
 
 
 # Open the default camera
-cam = cv2.VideoCapture(0)
+cam = cv2.VideoCapture()
+cam.open("/dev/v4l/by-id/usb-046d_0825_C9049F60-video-index0")
 
 # motor = motors.motor()
 # Get the default frame width and height
@@ -51,7 +52,7 @@ while True:
 
   # Define the range of black color in HSV
   lower_black = (0, 0, 0)
-  upper_black = (180, 255, 50)
+  upper_black = (180, 255, 110)
   
   # Define the range of red color in HSV
   lower_red = (0, 90, 90)
