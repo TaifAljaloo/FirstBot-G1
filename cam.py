@@ -23,6 +23,8 @@ fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 fps = 0
 num_frames = 30
 
+log_file = open("logs.txt", "w")
+
 while True:
   if fps == 0:
     start = time.time()
@@ -47,7 +49,7 @@ while True:
   # Define the range of red color in HSV
   lower_blue = (100, 150, 0)
   upper_blue = (140, 255, 255)
-  
+
   lower_black = (0, 0, 0)
   upper_black = (360, 100, 10)
   
@@ -130,14 +132,14 @@ while True:
 
   print("left :"+ str(left))
   print("right :"+ str(right))
-  
 
-
+  log_file.write(f"{str(left)} {str(right)} {time.time() - start}\n")
 
   # Press 'q' to exit the loop
   if cv2.waitKey(1) == ord('q'):
     break
 
+log_file.close()
 
 # Release the capture and writer objects
 cam.release()
