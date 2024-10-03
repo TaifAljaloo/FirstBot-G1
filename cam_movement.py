@@ -8,7 +8,7 @@ import motors
 
 last_turn = 0
 isBlack = 1
-testing = False
+testing = True
 # Open the default camera
 cam = cv2.VideoCapture(0)
 
@@ -43,37 +43,37 @@ while True:
     print("FPS: ", num_frames / seconds)
     fps = 0
 
-    # Convert the frame to HSV color space
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+  # Convert the frame to HSV color space
+  hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    lower_black = (0, 0, 0)
-    upper_black = (180, 255, 120)
-      
-    # Define the range of red color in HSV
-    lower_red = (0, 90, 90)
-    upper_red = (190, 255, 255)
+  lower_black = (0, 0, 0)
+  upper_black = (180, 255, 120)
     
-    # Create masks for the colors
-    mask_black = cv2.inRange(hsv, lower_black, upper_black)
-    mask_red = cv2.inRange(hsv, lower_red, upper_red)
+  # Define the range of red color in HSV
+  lower_red = (0, 90, 90)
+  upper_red = (190, 255, 255)
+  
+  # Create masks for the colors
+  mask_black = cv2.inRange(hsv, lower_black, upper_black)
+  mask_red = cv2.inRange(hsv, lower_red, upper_red)
 
-    # Combine the masks
-    mask = mask_black | mask_red
+  # Combine the masks
+  mask = mask_black | mask_red
 
-    # Bitwise-AND mask and original image
-    frame = cv2.bitwise_and(frame, frame, mask=mask)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
+  # Bitwise-AND mask and original image
+  frame = cv2.bitwise_and(frame, frame, mask=mask)
+  gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) 
 
-    # Write the frame to the output file
-    # out.write(gray)
+  # Write the frame to the output file
+  # out.write(gray)
 
-    # Turn the black color detected into blue
-    frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
+  # Turn the black color detected into blue
+  frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
 
-    # Display the captured frame and histogram
-    cv2.imshow('Camera', gray)
+  # Display the captured frame and histogram
+  cv2.imshow('Camera', gray)
 
-    # Ignore black color in the histogram
+  # Ignore black color in the histogram
   # Calculate histogram using OpenCV
   hist = cv2.calcHist([gray], [0], None, [256], [1, 256])
 
@@ -88,22 +88,22 @@ while True:
     cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
 
   # Display the histogram
-    cv2.imshow('Histogram', hist_img)
+  cv2.imshow('Histogram', hist_img)
 
-    # Calculate the sum of gray values in six equal parts
-    part1 = gray[:, :gray.shape[1] // 6]
-    part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
-    part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
-    part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
-    part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
-    part6 = gray[:, 5 * gray.shape[1] // 6:]
-    sum1 = np.sum(part1)/100000 * 6
-    sum2 = np.sum(part2)/100000 * 4
-    sum3 = np.sum(part3)/100000 * 5
-    sum4 = np.sum(part4)/100000 * 5
-    sum5 = np.sum(part5)/100000 * 4
-    sum6 = np.sum(part6)/100000 * 6
-  
+  # Calculate the sum of gray values in six equal parts
+  part1 = gray[:, :gray.shape[1] // 6]
+  part2 = gray[:, gray.shape[1] // 6: 2 * gray.shape[1] // 6]
+  part3 = gray[:, 2 * gray.shape[1] // 6: 3 * gray.shape[1] // 6]
+  part4 = gray[:, 3 * gray.shape[1] // 6: 4 * gray.shape[1] // 6]
+  part5 = gray[:, 4 * gray.shape[1] // 6: 5 * gray.shape[1] // 6]
+  part6 = gray[:, 5 * gray.shape[1] // 6:]
+  sum1 = np.sum(part1)/100000 * 6
+  sum2 = np.sum(part2)/100000 * 4
+  sum3 = np.sum(part3)/100000 * 5
+  sum4 = np.sum(part4)/100000 * 5
+  sum5 = np.sum(part5)/100000 * 4
+  sum6 = np.sum(part6)/100000 * 6
+
   
   if(isBlack):
     mask1 = cv2.inRange(hsv, lower_black, upper_black)
