@@ -74,21 +74,21 @@ while True:
     cv2.imshow('Camera', gray)
 
     # Ignore black color in the histogram
-    # Calculate histogram using OpenCV
-    hist = cv2.calcHist([gray], [0], None, [256], [1, 256]) 
+  # Calculate histogram using OpenCV
+  hist = cv2.calcHist([gray], [0], None, [256], [1, 256])
 
-    # Normalize the histogram
-    cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
+  # Normalize the histogram
+  cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)
 
-    # Create an image to display the histogram
-    hist_img = np.zeros((300, 256), dtype=np.uint8)
+  # Create an image to display the histogram
+  hist_img = np.zeros((300, 256), dtype=np.uint8)
 
-    # Draw the histogram
-    for x in range(1, 256):
-      cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
+  # Draw the histogram
+  for x in range(1, 256):
+    cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
 
-    # Display the histogram
-    cv2.imshow('Histogram', hist_img)
+  # Display the histogram
+  cv2.imshow('Histogram', hist_img)
 
     # Calculate the sum of gray values in six equal parts
     part1 = gray[:, :gray.shape[1] // 6]
