@@ -75,21 +75,28 @@ def main():
     # Try different camera indices if the default one doesn't work
     camera_indices = [0, 1, 2]
     cam = None
+    
     for index in camera_indices:
         cam = cv2.VideoCapture(index)
         if cam.isOpened():
-            print(f"Camera opened successfully with index {index}")
-            break
+            ret, frame = cam.read()
+            if ret:
+                print(f"Camera opened successfully with index {index}")
+                break
+            else:
+                print(f"Camera index {index} is busy or unavailable.")
+                cam.release()
+                cam = None
         else:
             cam.release()
             cam = None
-
+    
     if cam is None:
         print("Error: Could not open any camera.")
         exit()
-
-    cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
-    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+    
+        cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
  #   logs = Logs()
 
