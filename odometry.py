@@ -39,54 +39,41 @@ def inverse_kinematics(vl, va):
 
 def rotate_robot(motor_control, target_angle):
     speed = 3
-    distance_to_rotate = target_angle * L
+    distance_to_rotate = target_angle
     motor_control.move(speed, 0)
     current_rotate = 0
+    print(target_angle)
     while abs(current_rotate) < abs(distance_to_rotate):
         left_angular_speed, right_angular_speed = motor_control.get_speed()
         #convert to rad
-        left_angular_speed = left_angular_speed * pi / 180
-        right_angular_speed = right_angular_speed * pi / 180
-        current_rotate += (left_angular_speed - right_angular_speed) * R * 0.5
-     
+        vl,va = direct_kinematics(left_angular_speed * pi / 180, right_angular_speed * pi / 180)
+        print(current_rotate)
+        current_rotate += va * 0.1
+        time.sleep(0.1)
+    motor_control.stop()
 
 
 
 def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_tolerance=0.01):
-
+    speed=3
     motor_control = motor()
     x, y, theta = 0, 0, 0
+
     motor_control.lock()
     dir_angle = np.arctan2(y_target - y, x_target - x) 
     rotate_robot(motor_control, dir_angle)
-    return
-    motor_control.move(0.1, 0.1)   
-    t0 = time.time()
+    
+    distance_to_move = np.sqrt((x_target - x)**2 + (y_target - y)**2) - np.sqrt(L**2/2 - 2*L*np.cos(dir_angle))
+    distance_moved = 0
+    motor_control.move(speed, speed)   
 
-    dist = np.sqrt((x_target - x)**2 + (y_target - y)**2)
-    theta_error = theta_target - theta
-    while dist > dist_tolerance or abs(theta_error) > theta_tolerance:
-        t1 = time.time()
-        dt = t1 - t0
-        t0 = t1
+    while distance_moved < distance_to_move:
+        left_angular_speed, right_angular_speed = motor_control.get_speed()
+        vl,va = direct_kinematics(left_angular_speed * pi / 180, right_angular_speed * pi / 180)
+        distance_moved += vl * 0.1
+        time.sleep(0.1)
 
-        x_error = x_target - x
-        y_error = y_target - y
-        theta_error = theta_target - theta
-
-        dist = np.sqrt(x_error**2 + y_error**2)
-
-        right_angular_speed, left_angular_speed = motor_control.get_speed()
-        right_angular_speed *= -1
-
-        linear_speed, angular_speed = direct_kinematics(left_angular_speed, right_angular_speed)
-
-        x, y, theta = tick_odom(x, y, theta, linear_speed, angular_speed, dt)
-
-        dir_angle = np.arctan2(y_target - y, x_target - x)
-
-        motor_control.move(0.2 * dist + 0.1, 1.2 * (dir_angle - theta))
-
+    
     motor_control.stop()
     motor_control.lock()
 
