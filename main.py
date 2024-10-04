@@ -44,8 +44,17 @@ def display_histogram(gray):
         cv2.line(hist_img, (x-1, 300 - int(hist[x-1])), (x, 300 - int(hist[x])), (255,), 1)
     cv2.imshow('Histogram', hist_img)
 
+# def calculate_sums(gray):
+#     parts = [gray[:, i*gray.shape[1]//6:(i+1)*gray.shape[1]//6] for i in range(6)]
+#     sums = [np.sum(part)/100000 * 4 for part in parts]
+#     return sums
+
+
 def calculate_sums(gray):
-    parts = [gray[:, i*gray.shape[1]//6:(i+1)*gray.shape[1]//6] for i in range(6)]
+    height = gray.shape[0]
+    width = gray.shape[1]
+    top_60_percent = gray[:int(height * 0.6), :]  # Only the top 60% of the image
+    parts = [top_60_percent[:, i*width//6:(i+1)*width//6] for i in range(6)]
     sums = [np.sum(part)/100000 * 4 for part in parts]
     return sums
 
@@ -63,11 +72,6 @@ def control_motor(sums, motor):
             right = 3
         else:
             left = 3
-    if(current_state ==1):
-        if(left < 1):
-            left = 0
-        if(right < 1):
-            right = 0
     if not testing:
         motor.move(right, left)
     return left, right
