@@ -30,7 +30,7 @@ def is_yellow_present(frame):
 
 def process_frame(frame, lower_color, upper_color):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    hsv = cv2.medianBlur(hsv, 3)
+    hsv = cv2.medianBlur(hsv, 5)
     mask = cv2.inRange(hsv, lower_color, upper_color)
     frame = cv2.bitwise_and(frame, frame, mask=mask)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -46,7 +46,7 @@ def display_histogram(gray):
 
 def calculate_sums(gray):
     parts = [gray[:, i*gray.shape[1]//6:(i+1)*gray.shape[1]//6] for i in range(6)]
-    sums = [np.sum(part)/100000 * 3 for part in parts]
+    sums = [np.sum(part)/100000 * 4 for part in parts]
     return sums
 
 def control_motor(sums, motor):
