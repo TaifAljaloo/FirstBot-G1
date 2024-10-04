@@ -1,3 +1,5 @@
+from odometry import * 
+
 FILE_NAME = "logs.txt"
 
 class Logs:
