@@ -5,7 +5,7 @@ import motors
 from enum import Enum
 import signal
 import sys
-import logs
+#import logs
 
 
 # Constants
@@ -19,7 +19,6 @@ last_time = 0
 current_state = 0
 last_turn = 0
 testing = False
-
 
 def is_yellow_present(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -67,19 +66,30 @@ def control_motor(sums, motor):
         motor.move(right, left)
     return left, right
 
+def signal_handler(sig, frame, motor):
+    motor.stop()
+    motor.unclock()
+    cv2.destroyAllWindows()
+    sys.exit(0)
+
 def main():
     global last_time, current_state
-
-    motor = motors.motor()
 
     # Try different camera indices if the default one doesn't work
     camera_indices = [0, 1, 2]
     cam = None
+
     for index in camera_indices:
         cam = cv2.VideoCapture(index)
         if cam.isOpened():
-            print(f"Camera opened successfully with index {index}")
-            break
+            ret, frame = cam.read()
+            if ret:
+                print(f"Camera opened successfully with index {index}")
+                break
+            else:
+                print(f"Camera index {index} is busy or unavailable.")
+                cam.release()
+                cam = None
         else:
             cam.release()
             cam = None
@@ -90,8 +100,10 @@ def main():
 
     cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-
-    logs = Logs()
+    
+    motor=motors.motor()
+    
+    signal.signal(signal.SIGINT, lambda sig, frame: signal_handler(sig, frame, motor))
 
     while True:
         ret, frame = cam.read()
@@ -107,7 +119,7 @@ def main():
 
         if current_state == 1:
             print("Black detected")
-            logs.set_color("black")
+  #          logs.set_color("black")
             frame, gray = process_frame(frame, lower_black, upper_black)
             frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
             cv2.imshow('Camera', gray)
@@ -115,18 +127,18 @@ def main():
             sums = calculate_sums(gray)
             left, right = control_motor(sums, motor)
             print("Left Black: ", left, " Right Black: ", right)
-            logs.set_data(left, right, time.time())
+   #         logs.set_data(left, right, time.time())
 
         if current_state == 2:
             print("Red detected")
-            logs.set_color("red")
+    #        logs.set_color("red")
             frame, gray = process_frame(frame, lower_red, upper_red)
             cv2.imshow('Camera', gray)
             display_histogram(gray)
             sums = calculate_sums(gray)
             left, right = control_motor(sums, motor)
             print("Left Red: ", left, " Right Red: ", right)
-            logs.set_data(left, right, time.time())
+     #       logs.set_data(left, right, time.time())
 
         if current_state == 3:
             motor.stop()
@@ -135,8 +147,8 @@ def main():
             cam.release()
             cv2.destroyAllWindows()
             break
-
-        if cv2.waitKey(1) == ord('q'):
+        
+        if cv2.waitKey(1) == ord('q') or current_state == 3 :
             break
 
     cam.release()
