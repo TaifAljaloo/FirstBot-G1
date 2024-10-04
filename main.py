@@ -12,13 +12,14 @@ from odometry import *
 lower_red = (0, 90, 90)
 upper_red = (190, 255, 255)
 lower_black = (0, 0, 0)
-upper_black = (180, 255, 120)
+upper_black = (180, 255, 110)
 
 # Global variables
 last_time = 0
 current_state = 0
 last_turn = 0
 testing = False
+isStarted = False
 
 
 def is_yellow_present(frame):
@@ -110,6 +111,10 @@ def main():
                 last_time = time.time()
 
         if current_state == 1:
+            if(not isStarted):
+                motor.move(2,2)
+                time.sleep(1.5)
+                isStarted = True
             print("Black detected")
             logs.set_color("black")
             frame, gray = process_frame(frame, lower_black, upper_black)
