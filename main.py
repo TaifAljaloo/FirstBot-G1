@@ -98,14 +98,12 @@ def main():
         print("Error: Could not open any camera.")
         exit()
 
-        cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
-        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-        
-    motor = motors.motor()
+    cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+    
+    motor=motors.motor()
     
     signal.signal(signal.SIGINT, lambda sig, frame: signal_handler(sig, frame, motor))
-
- #   logs = Logs()
 
     while True:
         ret, frame = cam.read()
