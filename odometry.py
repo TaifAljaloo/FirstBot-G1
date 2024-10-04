@@ -84,31 +84,3 @@ def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_toler
 
     rotate_robot(motor_control, theta_target)
 
-def print_map():
-
-    with open("logs_1.txt", "r") as f: data = [i.replace("\n", "").split(" ") for i in f.readlines()]
-
-    l_data, l_pos = data[1], [0,0,0]
-    c_color = data[0][1]
-    col = {c_color: []}
-
-    for i in range(2, len(data)):
-        if data[i][0] == "#":
-            c_color = data[i][1]
-            col[c_color] = []
-        else:
-            vl, va = direct_kinematics(float(data[i][0]), float(data[i][1]))
-            dx, dy, dtheta = tick_odom(l_pos[0], l_pos[1], l_pos[2], vl, va, float(data[i][2]) - float(l_data[2]))
-            col[c_color].append([dx, dy, dtheta])
-            l_data, l_pos = data[i], [dx, dy, dtheta]
-
-    for c in col.keys():
-        plt.scatter([p[0] for p in col[c]], [p[1] for p in col[c]], color=c)
-
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title('Trajet du robot')
-    plt.axis('equal')
-    plt.show()
-
-print_map()
