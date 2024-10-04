@@ -5,7 +5,7 @@ import motors
 from enum import Enum
 import signal
 import sys
-import logs
+#import logs
 
 
 # Constants
@@ -91,7 +91,7 @@ def main():
     cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
-    logs = Logs()
+ #   logs = Logs()
 
     while True:
         ret, frame = cam.read()
@@ -107,7 +107,7 @@ def main():
 
         if current_state == 1:
             print("Black detected")
-            logs.set_color("black")
+  #          logs.set_color("black")
             frame, gray = process_frame(frame, lower_black, upper_black)
             frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
             cv2.imshow('Camera', gray)
@@ -115,18 +115,18 @@ def main():
             sums = calculate_sums(gray)
             left, right = control_motor(sums, motor)
             print("Left Black: ", left, " Right Black: ", right)
-            logs.set_data(left, right, time.time())
+   #         logs.set_data(left, right, time.time())
 
         if current_state == 2:
             print("Red detected")
-            logs.set_color("red")
+    #        logs.set_color("red")
             frame, gray = process_frame(frame, lower_red, upper_red)
             cv2.imshow('Camera', gray)
             display_histogram(gray)
             sums = calculate_sums(gray)
             left, right = control_motor(sums, motor)
             print("Left Red: ", left, " Right Red: ", right)
-            logs.set_data(left, right, time.time())
+     #       logs.set_data(left, right, time.time())
 
         if current_state == 3:
             motor.stop()
