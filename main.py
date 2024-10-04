@@ -20,6 +20,7 @@ current_state = 0
 last_turn = 0
 testing = False
 
+
 def is_yellow_present(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     yellow_lower = np.array([20, 100, 100])
@@ -66,30 +67,19 @@ def control_motor(sums, motor):
         motor.move(right, left)
     return left, right
 
-def signal_handler(sig, frame, motor):
-    motor.stop()
-    motor.unclock()
-    cv2.destroyAllWindows()
-    sys.exit(0)
-
 def main():
     global last_time, current_state
+
+    motor = motors.motor()
 
     # Try different camera indices if the default one doesn't work
     camera_indices = [0, 1, 2]
     cam = None
-
     for index in camera_indices:
         cam = cv2.VideoCapture(index)
         if cam.isOpened():
-            ret, frame = cam.read()
-            if ret:
-                print(f"Camera opened successfully with index {index}")
-                break
-            else:
-                print(f"Camera index {index} is busy or unavailable.")
-                cam.release()
-                cam = None
+            print(f"Camera opened successfully with index {index}")
+            break
         else:
             cam.release()
             cam = None
@@ -100,10 +90,8 @@ def main():
 
     cam.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-    
-    motor=motors.motor()
-    
-    signal.signal(signal.SIGINT, lambda sig, frame: signal_handler(sig, frame, motor))
+
+ #   logs = Logs()
 
     while True:
         ret, frame = cam.read()
@@ -147,8 +135,8 @@ def main():
             cam.release()
             cv2.destroyAllWindows()
             break
-        
-        if cv2.waitKey(1) == ord('q') or current_state == 3 :
+
+        if cv2.waitKey(1) == ord('q'):
             break
 
     cam.release()
