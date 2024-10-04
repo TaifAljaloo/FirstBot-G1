@@ -3,7 +3,7 @@ from odometry import go_to_xya
 
 
 while True:
-    input = input("Enter x y theta: ")
-    x, y, theta = input.split()
+    raw = input("Enter x y theta: ")
+    x, y, theta = raw.split()
     go_to_xya(float(x), float(y), float(theta))
     print("Done")

@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 L = 0.191
 R = 0.026
 
+GOTO_SPEED = 17
+REFRESH_RATE = 0.01
+
 def direct_kinematics(vg, vd):
     return R/2 * (vd + vg), R/L * (vd - vg)
 
@@ -38,7 +41,7 @@ def inverse_kinematics(vl, va):
     return vl/R - (va * L)/(2 * R), vl/R + (va * L)/(2 * R)
 
 def rotate_robot(motor_control, target_angle):
-    speed = 3
+    speed = GOTO_SPEED
     distance_to_rotate = target_angle
     motor_control.move(speed * np.sign(target_angle), -speed * np.sign(target_angle))
     current_rotate = 0
@@ -47,14 +50,14 @@ def rotate_robot(motor_control, target_angle):
         left_angular_speed, right_angular_speed = motor_control.get_speed()
         #convert to rad
         vl,va = direct_kinematics(left_angular_speed * pi / 180, -right_angular_speed * pi / 180)
-        current_rotate += va * 0.1
-        time.sleep(0.1)
+        current_rotate += va * REFRESH_RATE
+        time.sleep(REFRESH_RATE)
     motor_control.stop()
 
 
 
 def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_tolerance=0.01):
-    speed=3
+    speed=GOTO_SPEED
     motor_control = motor()
     x, y, theta = 0, 0, 0
 
@@ -70,8 +73,8 @@ def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_toler
     
         left_angular_speed, right_angular_speed = motor_control.get_speed()
         vl,va = direct_kinematics(abs(left_angular_speed * pi / 180), abs(right_angular_speed * pi / 180))
-        distance_moved += vl * 0.1
-        time.sleep(0.1)
+        distance_moved += vl * REFRESH_RATE
+        time.sleep(REFRESH_RATE)
 
     
     motor_control.stop()
