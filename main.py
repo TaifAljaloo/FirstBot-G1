@@ -12,7 +12,7 @@ from odometry import *
 lower_red = (0, 90, 90)
 upper_red = (190, 255, 255)
 lower_black = (0, 0, 0)
-upper_black = (180, 255, 110)
+upper_black = (180, 255, 120)
 
 # Global variables
 last_time = 0
@@ -47,7 +47,7 @@ def display_histogram(gray):
 
 def calculate_sums(gray):
     parts = [gray[:, i*gray.shape[1]//6:(i+1)*gray.shape[1]//6] for i in range(6)]
-    sums = [np.sum(part)/100000 * (3 if i in [0, 5] else 5) for i, part in enumerate(parts)]
+    sums = [np.sum(part)/100000 * (2 if i in [0, 5] else 5) for i, part in enumerate(parts)]
     return sums
 
 def control_motor(sums, motor):
@@ -73,7 +73,7 @@ def control_motor(sums, motor):
     return left, right
 
 def main():
-    global last_time, current_state
+    global last_time, current_state, isStarted
 
     motor = motors.motor()
 
