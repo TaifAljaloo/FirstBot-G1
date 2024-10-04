@@ -1,6 +1,7 @@
 from motors import motor
 from math import pi
 import numpy as np
+import time
 import matplotlib.pyplot as plt
 
 L = 0.191
@@ -36,6 +37,14 @@ def tick_odom(xn, yn, thetan, vl, va, dt):
 def inverse_kinematics(vl, va):
     return vl/R - (va * L)/(2 * R), vl/R + (va * L)/(2 * R)
 
+def rotate_robot(motor_control, target_angle):
+    current_angle = 0  # This should be obtained from the robot's sensors
+    while abs(target_angle - current_angle) > 0.01:
+        angular_speed = 0.1 * (target_angle - current_angle)
+        motor_control.move(0, angular_speed)
+        current_angle += angular_speed * 0.1  # Simulate angle change
+    motor_control.stop()
+    
 def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_tolerance=0.01):
 
     motor_control = motor()
@@ -62,7 +71,7 @@ def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_toler
         right_angular_speed, left_angular_speed = motor_control.get_speed()
         right_angular_speed *= -1
 
-        linear_speed, angular_speed = direct_kinematics(left_speed, right_speed)
+        linear_speed, angular_speed = direct_kinematics(left_angular_speed, right_angular_speed)
 
         x, y, theta = tick_odom(x, y, theta, linear_speed, angular_speed, dt)
 
