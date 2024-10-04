@@ -4,12 +4,15 @@ FILE_NAME = "logs.txt"
 
 class Logs:
     file = None
+    c_color = None
 
     def __init__(self):
         self.file = open(FILE_NAME, "w")
     
     def set_color(self, color):
-        self.file.write(f"# {color}\n")
+        if color != self.c_color:
+            self.c_color = color
+            self.file.write(f"# {self.c_color}\n")
 
     def set_data(self, left, right, time):
         self.file.write(f"{left} {right} {time}\n")
