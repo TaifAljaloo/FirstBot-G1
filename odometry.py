@@ -70,7 +70,7 @@ def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_toler
     while distance_moved < distance_to_move:
     
         left_angular_speed, right_angular_speed = motor_control.get_speed()
-        vl,va = direct_kinematics(abs(left_angular_speed * pi / 180), right_angular_speed * pi / 180)
+        vl,va = direct_kinematics(abs(left_angular_speed * pi / 180), abs(right_angular_speed * pi / 180))
         distance_moved += vl * 0.1
         time.sleep(0.1)
 
