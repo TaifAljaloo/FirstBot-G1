@@ -19,6 +19,7 @@ last_time = 0
 current_state = 0
 last_turn = 0
 testing = False
+isStarted = False
 
 
 def is_yellow_present(frame):
@@ -46,7 +47,7 @@ def display_histogram(gray):
 
 def calculate_sums(gray):
     parts = [gray[:, i*gray.shape[1]//6:(i+1)*gray.shape[1]//6] for i in range(6)]
-    sums = [np.sum(part)/100000 * (3 if i in [0, 5] else 5) for i, part in enumerate(parts)]
+    sums = [np.sum(part)/100000 * (2 if i in [0, 5] else 5) for i, part in enumerate(parts)]
     return sums
 
 def control_motor(sums, motor):
@@ -72,7 +73,7 @@ def control_motor(sums, motor):
     return left, right
 
 def main():
-    global last_time, current_state
+    global last_time, current_state, isStarted
 
     motor = motors.motor()
 
@@ -110,6 +111,10 @@ def main():
                 last_time = time.time()
 
         if current_state == 1:
+            if(not isStarted):
+                motor.move(2,2)
+                time.sleep(1.5)
+                isStarted = True
             print("Black detected")
             logs.set_color("black")
             frame, gray = process_frame(frame, lower_black, upper_black)
