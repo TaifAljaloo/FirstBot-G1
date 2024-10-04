@@ -5,7 +5,7 @@ import motors
 from enum import Enum
 import signal
 import sys
-import logs
+from logs import Logs
 
 
 # Constants
