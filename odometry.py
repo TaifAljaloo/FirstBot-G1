@@ -38,13 +38,17 @@ def inverse_kinematics(vl, va):
     return vl/R - (va * L)/(2 * R), vl/R + (va * L)/(2 * R)
 
 def rotate_robot(motor_control, target_angle):
-    current_angle = 0  # This should be obtained from the robot's sensors
-    while abs(target_angle - current_angle) > 0.01:
-        angular_speed = 0.1 * (target_angle - current_angle)
-        motor_control.move(0, angular_speed)
-        current_angle += angular_speed * 0.1  # Simulate angle change
-    motor_control.stop()
-    
+    speed = 0.1
+    distance_to_rotate = target_angle * L
+    motor_control.move(speed, 0)
+    current_rotate = 0
+    while abs(current_rotate) < abs(distance_to_rotate):
+        left_angular_speed, right_angular_speed = motor_control.get_speed()
+        current_rotate += (left_angular_speed - right_angular_speed) * R * 0.5
+     
+
+
+
 def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_tolerance=0.01):
 
     motor_control = motor()
