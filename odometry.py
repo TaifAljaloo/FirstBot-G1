@@ -40,7 +40,7 @@ def inverse_kinematics(vl, va):
 def rotate_robot(motor_control, target_angle):
     speed = 3
     distance_to_rotate = target_angle
-    motor_control.move(speed, -speed)
+    motor_control.move(speed * np.sign(target_angle), -speed * np.sign(target_angle))
     current_rotate = 0
     print(target_angle)
     while abs(current_rotate) < abs(distance_to_rotate):
