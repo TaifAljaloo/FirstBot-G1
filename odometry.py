@@ -63,7 +63,7 @@ def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_toler
     dir_angle = np.arctan2(y_target - y, x_target - x) 
     rotate_robot(motor_control, dir_angle)
     
-    distance_to_move = np.sqrt((x_target - x)**2 + (y_target - y)**2) - np.sqrt(L**2/2 - 2*L*np.cos(dir_angle))
+    distance_to_move = np.sqrt((x_target - x)**2 + (y_target - y)**2) - np.sqrt(L**2/2 * (1 - np.cos(dir_angle)) )
     distance_moved = 0
     motor_control.move(speed, speed)   
 
