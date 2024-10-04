@@ -39,8 +39,8 @@ def inverse_kinematics(vl, va):
 
 def rotate_robot(motor_control, target_angle):
     speed = 3
-    distance_to_rotate = target_angle
-    motor_control.move(speed, 0)
+    distance_to_rotate = target_angle/2
+    motor_control.move(speed, -speed)
     current_rotate = 0
     print(target_angle)
     while abs(current_rotate) < abs(distance_to_rotate):
@@ -63,19 +63,20 @@ def go_to_xya(x_target, y_target, theta_target, dist_tolerance=0.01, theta_toler
     dir_angle = np.arctan2(y_target - y, x_target - x) 
     rotate_robot(motor_control, dir_angle)
     
-    distance_to_move = np.sqrt((x_target - x)**2 + (y_target - y)**2) - np.sqrt(L**2/2 * (1 - np.cos(dir_angle)) )
+    distance_to_move = np.sqrt((x_target - x)**2 + (y_target - y)**2)
     distance_moved = 0
     motor_control.move(speed, speed)   
 
     while distance_moved < distance_to_move:
+    
         left_angular_speed, right_angular_speed = motor_control.get_speed()
-        vl,va = direct_kinematics(left_angular_speed * pi / 180, right_angular_speed * pi / 180)
+        vl,va = direct_kinematics(abs(left_angular_speed * pi / 180), right_angular_speed * pi / 180)
         distance_moved += vl * 0.1
         time.sleep(0.1)
 
     
     motor_control.stop()
-    motor_control.lock()
+    
 
     rotate_robot(motor_control, theta_target)
 
