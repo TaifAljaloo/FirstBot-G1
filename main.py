@@ -3,6 +3,9 @@ import time
 import numpy as np
 import motors
 from enum import Enum
+import signal
+import sys
+
 
 # Constants
 lower_red = (0, 90, 90)
@@ -15,6 +18,7 @@ last_time = 0
 current_state = 0
 last_turn = 0
 testing = False
+
 
 def is_yellow_present(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -98,7 +102,7 @@ def main():
                 print("Yellow detected= ", current_state)
                 last_time = time.time()
 
-        if current_state == 2:
+        if current_state == 1:
             print("Black detected")
             frame, gray = process_frame(frame, lower_black, upper_black)
             frame[np.where((frame == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
@@ -106,16 +110,16 @@ def main():
             display_histogram(gray)
             sums = calculate_sums(gray)
             left, right = control_motor(sums, motor)
-            print("Left: ", left, " Right: ", right)
+            print("Left Black: ", left, " Right Black: ", right)
 
-        if current_state == 1:
+        if current_state == 2:
             print("Red detected")
             frame, gray = process_frame(frame, lower_red, upper_red)
             cv2.imshow('Camera', gray)
             display_histogram(gray)
             sums = calculate_sums(gray)
             left, right = control_motor(sums, motor)
-            print("Left: ", left, " Right: ", right)
+            print("Left Red: ", left, " Right Red: ", right)
 
         if current_state == 3:
             motor.stop()
